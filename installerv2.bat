@@ -32,10 +32,6 @@ REM Klonen des Repositorys
 echo Klonen des Repositorys...
 git clone https://github.com/GreenDevil1/Project-CeNtis.git
 
-REM Entpacken des Archivs
-echo Entpacken des Archivs...
-powershell -Command "Expand-Archive -Path C:\Users\%USERNAME%\Project-CeNtis\Project-CeNtis\Project CeNtis.zip -DestinationPath C:\Users\%USERNAME%\Project-CeNtis\Project-CeNtis"
-
 REM Starten des Skripts
 echo Starten des Skripts...
 python "C:\Users\%USERNAME%\Project-CeNtis\Project CeNtis\CeNtis.py"
