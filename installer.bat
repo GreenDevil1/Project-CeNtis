@@ -1,55 +1,43 @@
-# Check for internet connection
-if (!(Test-NetConnection -ComputerName www.google.com -InformationLevel Quiet)) {
-    Write-Host "No internet connection detected. Exiting."
-    exit
-}
+@echo off
+setlocal enabledelayedexpansion
 
-# Check if Python is installed
-if (!(Get-Command python -ErrorAction SilentlyContinue)) {
-    # Download and install Python
-    $url = "https://www.python.org/ftp/python/3.11.4/python-3.11.4-amd64.exe"
-    $destination = "$env:USERPROFILE\Downloads\python-3.11.4-amd64.exe"
+REM Überprüfen, ob Python installiert ist
+where python >nul 2>&1
+if %errorlevel% neq 0 (
+    REM Python herunterladen und installieren
+    echo Python wird heruntergeladen und installiert...
+    powershell -Command "Invoke-WebRequest https://www.python.org/ftp/python/3.9.6/python-3.9.6-amd64.exe -OutFile %TEMP%\python-installer.exe"
+    %TEMP%\python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+    echo Python wurde installiert.
+) else (
+    echo Python ist bereits installiert.
+)
 
-    (New-Object Net.WebClient).DownloadFile($url, $destination)
-    Start-Process -FilePath $destination -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait
+REM Installieren der erforderlichen Pakete
+echo Installieren der erforderlichen Pakete...
+pip install colorama cryptography pytube moviepy phonenumbers folium
 
-    # Install the required modules using pip
-    pip install colorama cryptography pytube moviepy phonenumbers folium
+REM Überprüfen, ob Git installiert ist
+where git >nul 2>&1
+if %errorlevel% neq 0 (
+    REM Git herunterladen und installieren
+    echo Git wird heruntergeladen und installiert...
+    winget install --id Git.Git -e --source winget
+    echo Git wurde installiert.
+) else (
+    echo Git ist bereits installiert.
+)
 
-    # Open a GUI window to display a message
-    Add-Type -AssemblyName System.Windows.Forms
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Installation Complete"
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Python and the required modules have been installed."
-    $label.ForeColor = "Red"
-    $label.AutoSize = $true
-    $form.Controls.Add($label)
-    $form.ShowDialog()
-}
+REM Klonen des Repositorys
+echo Klonen des Repositorys...
+git clone https://github.com/GreenDevil1/Project-CeNtis.git
 
-# Check if Git is installed
-if (!(Get-Command git -ErrorAction SilentlyContinue)) {
-    # Download and install Git
-    $url = "https://github.com/git-for-windows/git/releases/download/v2.35.1.windows.2/Git-2.35.1.2-64-bit.exe"
-    $destination = "$env:USERPROFILE\Downloads\Git-2.35.1.2-64-bit.exe"
+REM Entpacken des Archivs
+echo Entpacken des Archivs...
+powershell -Command "Expand-Archive -Path Project-CeNtis/Project-CeNtis.zip -DestinationPath Project-CeNtis"
 
-    (New-Object Net.WebClient).DownloadFile($url, $destination)
-    Start-Process -FilePath $destination -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP-" -Wait
-}
+REM Starten des Skripts
+echo Starten des Skripts...
+python Project-CeNtis/Project CeNtis/Project CeNtis - Kopie/CeNtis.py
 
-# Download the Git repository
-$url = "https://github.com/GreenDevil1/Project-CeNtis.git"
-$destination = "$env:USERPROFILE\Downloads\Project-CeNtis"
-
-git clone $url $destination
-
-# Unzip the file in the repository
-$zipPath = "$destination\Project-CeNtis\Project-CeNtis.zip"
-Expand-Archive -Path $zipPath -DestinationPath "$env:USERPROFILE\Downloads"
-
-# Run the Python script
-$scriptPath = "$env:USERPROFILE\Project-CeNtis\Project CeNtis\Project CeNtis - Kopie\CeNtis.py"
-Start-Process python -ArgumentList "`"$scriptPath`""
-
-Write-Host "Done."
+pause
