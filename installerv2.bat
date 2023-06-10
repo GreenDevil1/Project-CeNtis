@@ -32,10 +32,6 @@ REM Klonen des Repositorys
 echo Klonen des Repositorys...
 git clone https://github.com/GreenDevil1/Project-CeNtis.git
 
-REM Starten des Skripts
-echo Starten des Skripts...
-python "C:\Users\%USERNAME%\Project-CeNtis\Project CeNtis\CeNtis.py"
-
 REM Fragen, ob der Benutzer eine Aufgabe in der Aufgabenplanung erstellen möchte
 set /p create_task="Möchtest du eine Aufgabe in der Aufgabenplanung erstellen (j/n)? "
 if /i "!create_task!"=="j" (
@@ -44,5 +40,9 @@ if /i "!create_task!"=="j" (
     schtasks /create /tn "Firewall_blocks_IPs" /tr "\"C:\Users\%USERNAME%\Project-CeNtist\Project CeNtist\firewall.py\"" /sc onlogon /ru %USERNAME% /rl highest /f
     echo Die Aufgabe wurde erstellt.
 )
+
+REM Starten des Skripts
+echo Starten des Skripts...
+python "C:\Users\%USERNAME%\Project-CeNtis\Project CeNtis\CeNtis.py"
 
 pause
