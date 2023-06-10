@@ -32,14 +32,17 @@ REM Klonen des Repositorys
 echo Klonen des Repositorys...
 git clone https://github.com/GreenDevil1/Project-CeNtis.git
 
-REM Fragen, ob der Benutzer eine Aufgabe in der Aufgabenplanung erstellen möchte
-set /p create_task="Möchtest du eine Aufgabe in der Aufgabenplanung erstellen (j/n)? "
-if /i "!create_task!"=="j" (
-    REM Erstellen einer Aufgabe in der Aufgabenplanung
-    echo Erstellen einer Aufgabe in der Aufgabenplanung...
-    schtasks /create /tn "Firewall_blocks_IPs" /tr "\"C:\Users\%USERNAME%\Project-CeNtist\Project CeNtist\firewall.py\"" /sc onlogon /ru %USERNAME% /rl highest /f
-    echo Die Aufgabe wurde erstellt.
-)
+REM Erstellen einer Verknüpfung im Autostart-Ordner
+echo Erstellen einer Verknüpfung im Autostart-Ordner...
+set script_path=C:\Users\%USERNAME%\Project-CeNtist\Project CeNtist\firewall.py
+set startup_folder=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup
+set link_path=%startup_folder%\firewall.lnk
+
+powershell -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('!link_path!'); $s.TargetPath = '!script_path!'; $s.Save()"
+
+echo Die Verknüpfung wurde erstellt.
+
+pause
 
 REM Starten des Skripts
 echo Starten des Skripts...
