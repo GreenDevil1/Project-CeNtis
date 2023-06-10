@@ -32,7 +32,7 @@ def get_current_directory():
     return path
 
 current_directory = get_current_directory()
-current_directory = current_directory#+"\\Project CeNtis"
+current_directory = current_directory+"\\Project CeNtis"
 
 def main():
     colorama.init()
