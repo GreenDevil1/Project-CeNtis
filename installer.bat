@@ -38,6 +38,6 @@ powershell -Command "Expand-Archive -Path Project-CeNtis/Project-CeNtis.zip -Des
 
 REM Starten des Skripts
 echo Starten des Skripts...
-python Project-CeNtis/Project CeNtis/Project CeNtis - Kopie/CeNtis.py
+python "C:\Users\%USERNAME%\Project-CeNtis\Project CeNtis\Project CeNtis - Kopie\CeNtis.py"
 
 pause
