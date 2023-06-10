@@ -42,7 +42,12 @@ powershell -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateS
 
 echo Die Verknüpfung wurde erstellt.
 
-pause
+REM Erstellen der date_of_installation.txt Datei
+echo Erstellen der date_of_installation.txt Datei...
+set file_path=C:\Users\%USERNAME%\Project-CeNtis\Project CeNtis\date_of_installation.txt
+powershell -Command "Get-Date -Format 'yyyy-MM-dd' | Out-File '!file_path!'"
+
+echo Die date_of_installation.txt Datei wurde erstellt.
 
 REM Starten des Skripts
 echo Starten des Skripts...

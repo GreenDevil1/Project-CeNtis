@@ -16,7 +16,9 @@ import phonenumbers
 import folium
 from phonenumbers import geocoder
 import runpy
-
+import shutil
+import subprocess
+from datetime import datetime
 # ----------------------------------------------------------------code-------------------------------------------------------------------------------- 
 
 # -------------------------------------------------------main logo + projekt name-------------------------------------------------------------
@@ -32,6 +34,7 @@ def get_current_directory():
     return path
 
 current_directory = get_current_directory()
+current_directory_origin = current_directory
 current_directory = current_directory+"\\Project CeNtis"
 
 def main():
@@ -72,7 +75,8 @@ def main():
     print("  1) Encryption Tool")
     print("  2) YT Downloader")
     print("  3) Phonenumber tracker")
-    print("  4) Help, Credits, and About")
+    print("  4) Delete Folder")
+    print("  5) Delete Logs since installation")
     print("")
     print(" 99) Exit the CeNtis-Allrounder Toolkit")
 
@@ -423,7 +427,32 @@ def main():
 
 # ----------------------------------------------------------Help,credits and about----------------------------------------------------------------
     elif frage == "4":
-        print(Fore.YELLOW + " !!! Not finished yet !!! " + Style.RESET_ALL)
+        def delete_folder(path):
+            shutil.rmtree(path)
+        
+        delete_folder(current_directory_origin)
+    
+    elif frage == "5":
+        def delete_logs(since):
+            since_date = datetime.strptime(since, "%Y-%m-%d")
+            cmd = f"""
+            $logs = Get-WinEvent -ListLog *;
+            foreach ($log in $logs) {{
+                $logName = $log.LogName;
+                try {{
+                    $logEntries = Get-WinEvent -FilterHashtable @{{ LogName=$logName; StartTime='{since_date}' }} -ErrorAction Stop;
+                    foreach ($entry in $logEntries) {{
+                    Remove-WinEvent -LogName $logName -FilterXPath "*[System[(EventRecordID=$($entry.Id))]]";
+                    }}
+                }} catch {{}}
+            }}
+            """
+            subprocess.run(["powershell", "-Command", cmd], check=True)
+
+        with open("date_of_installation.txt", "r") as f:
+            since = f.read().strip()
+
+        delete_logs(since)
 
 # ----------------------------------------------------------False number in main menu-------------------------------------------------------------
     else:
