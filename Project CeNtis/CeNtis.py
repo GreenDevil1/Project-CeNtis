@@ -449,7 +449,7 @@ def main():
             """
             subprocess.run(["powershell", "-Command", cmd], check=True)
 
-        with open(current_directory+"date_of_installation.txt", "r") as f:
+        with open(current_directory+"\\date_of_installation.txt", "r") as f:
             since = f.read().strip()
 
         delete_logs(since)
